@@ -10,19 +10,19 @@ La guardaremos en el fichero _product.class.js_. Tendrá las siguientes **propie
   
 Esta clase tendrá los siguientes **métodos**:
   - **changeUnits**: recibe el número de unidades a añadir al objeto (debe ser un entero positivo para aumentar, o negativo para disminuir unidades). Devolverá el producto modificado. Si se intentan restar más unidades de las que hay no resta nada y genera un error.
-  ```javascrpt
+  ```javascript
   changeUnits(units: Integer): Product
   ```    
   - **productImport**: devuelve el importe total del producto (su precio multiplicado por el nº de unidades)
-  ```javascrpt
+  ```javascript
   productImport(): Number
   ```  
   - **xxxx** (¿qué nombre le deberías dar a este método?): si se intenta **imprimir** el producto se mostrará su descripción, sus unidades entre paréntesis, su precio y el importe total (los € siempre con 2 decimales) como en el siguiente ejemplo:
-```
+```html
         TV Samsung MP45: 10 uds. x 235,95 €/u = 2359,50 €
 ```
 
-  ```javascrpt
+  ```javascript
   xxxx(): String
   ``` 
 
@@ -40,35 +40,35 @@ La clase tendrá los **métodos**:
     - no se le pasa _name_
     - no se le pasa _price_ o no es un número positivo
     - se le pasa _units_ pero no es un número entero positivo
-  ```javascrpt
+  ```javascript
   addProduct(data: Object): Product
   ```
   - **delProduct**: recibe como parámetro la id de un producto y, si no tiene unidades, lo elimina del almacén y devuelve el producto eliminado. Genera un error si no existe el producto o si sus unidades no están a 0
-  ```javascrpt
+  ```javascript
   delProduct(id: Integer): Product
   ```
   - **changeProduct**: recibe como **único** parámetro **un objeto** con la id de un producto y uno o más campos a modificar con sus nuevos valores (los campos que no se pasan permanecerán sin cambios). Devuelve el objeto modificado si ha podido hacerse o genera un error en caso contrario
-  ```javascrpt
+  ```javascript
   changeProduct(data: Object): Product
   ```
   - **changeProductUnits**: recibe como parámetros la id de un producto y el número de unidades a incrementar (o disminuir si el número es negativo). Devuelve el producto modificado si ha podido hacerse o generará un error en caso contrario
-  ```javascrpt
+  ```javascript
   changeProductUnits(id: Integer, units: Integer): Product
   ```  
   - **totalImport**: devuelve el valor total de los productos del almacén (su precio por sus uds). Para ello usa el método _productImport_ de cada producto
-  ```javascrpt
+  ```javascript
   totalImport(): Number
   ```    
   - **underStock**: recibe un nº de unidades y devuelve un array con los productos que tengan menos de dichas unidades
-  ```javascrpt
+  ```javascript
   underStock(units: Integer): Array
   ```    
   - **orderByUnits**: devuelve el array de productos ordenado por unidades de forma descendente
-  ```javascrpt
+  ```javascript
   orderByUnits(): Array
   ```    
   - **orderByName**: devuelve el array de productos ordenado por el nombre del producto
-  ```javascrpt
+  ```javascript
   orderByName(): Array
   ```    
   - **xxxx** (¿qué nombre le deberías dar a este método?): si se intenta imprimir el almacén devuelve una cadena con la id del almacén, el nº de productos y su importe total con 2 decimales, y debajo una lista con los datos de cada producto como en el siguiente ejemplo:
@@ -78,7 +78,7 @@ Almacén 1 => 2 productos: 2174,75 €
 - USB Kingston 16 GB: 100 uds. x 19,95 €/u = 1995,00 €
 ```
 
-  ```javascrpt
+  ```javascript
   xxxx(): String
   ```  
 
@@ -99,7 +99,9 @@ En este ejercicio ya tienes el _package.json_ creado y configurado por lo que lo
 - cuando quieras probarlo en el navegador ejecuta `npx webpack --mode=development`: esto crea el fichero **dist/main.js** (el que está enlazado en el _index.html_) donde mete el código de todos nuestros ficheros javascript. Deberás ejecutarlo cada vez que hagas cambios en tu código y quieras probarlos en el navegador
 
 Fijaos en el código que os paso. Para que la clase _Store_ pueda usar los métodos de _Product_ debemos hacer:
-- añadir al final de _product.class.js_ el código `module.exports = Product`. Esto hace accesible la clase a cualquier fichero que importe _product.class.js_. Es lo mismo que hacíamos en los ficheros _functions.js_ de los ejercicios anteriores para que los tests pudieran acceder a sus funciones
+- añadir al final deconst Store = require('./store.class');
+
+ _product.class.js_ el código `module.exports = Product`. Esto hace accesible la clase a cualquier fichero que importe _product.class.js_. Es lo mismo que hacíamos en los ficheros _functions.js_ de los ejercicios anteriores para que los tests pudieran acceder a sus funciones
 - añadir al principio de _store.class.js_ el código `const Product = require('./product.class')`. Crea una variable _Product_ que es la clase exportada en el otro fichero
 
 Lo mismo tendréis que hacer para que _index.js_ pueda llamar a métodos de _Store_ (exportar la clase en _store.class_ e importar ese fichero en _index_).
