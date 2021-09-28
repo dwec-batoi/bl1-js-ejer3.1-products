@@ -82,27 +82,27 @@ Almacén 1 => 2 productos: 2174,75 €
   xxxx(): String
   ```  
 
-## Organizar el código
+## Organizar el código: webpack
 Lo correcto es no tener todo el código en un único fichero javascript sino cada cosa en su fichero correspondiente. Así que dentro de la carpeta **src/** crearemos los ficheros:
 - **product.class.js**: la clase _Product_ con sus propiedades y métodos
 - **store.class.js**: la clase _Store_ con sus propiedades y métodos
 - **index.js**: el programa principal que crea el almacén, lo modifica (añade, elimina y modifica productos) y muestra por consola su contenido
 
-En el _index.html_ habría que enlazar los 3 ficheros en el orden correcto (productos, almacén y index para que desde _index.js_ se pueda llamar a métodos de _Store_ y desde _store.js_ a métodos de _Product_). Como esto ya empieza a ser incómodo vamos a hacer uso de _webpack_ para que empaquete todos nuestros ficheros javascript en un único fichero que se llamará _./dist/main.js_ y que será el único que enlazaremos en el _index.html_. Consulta [cómo usar webpack](../12-tests.html#usando-webpack) para hacerlo. 
+En el _index.html_ habría que enlazar los 3 ficheros en el orden correcto (productos, almacén y index para que desde _index.js_ se pueda llamar a métodos de _Store_ y desde _store.js_ a métodos de _Product_). Como esto ya empieza a ser incómodo vamos a hacer uso de **_webpack_** para que empaquete todos nuestros ficheros javascript en un único fichero que se llamará _./dist/main.js_ y que será el único que enlazaremos en el _index.html_. Consulta [cómo usar webpack](../12-tests.html#usando-webpack) para hacerlo. 
 
-Lo que habría que hacer (no lo hagas, ya está hecho) es:
+Lo que habría que hacer (no lo hagas, ya tienes el _package.json_) es:
 - `npm init`: inicializamos nuestro proyecto lo que creará el fichero **package.json**. Recuerda escribir **jest** cuando nos pregunte por los tests
 - `npm i -D webpack webpack-cli`: instalamos _webpack_ como dependencia de desarrollo (en la versión de producción no estará)
 - 
-En este ejercicio ya lo tienes todo configurado y lo único que tienes que hacer es instalar las dependencias (`npm install`):
-- para pasar los test: `npm run test`
-- para probarlo en el navegador: `npx webpack --mode=development`: crea el fichero **dist/main.js** donde mete el código de todos nuestros ficheros javascript (deberás ejecutarlo cada vez que hagas cambios en tu código y quieras probarlos en el navegador)
+En este ejercicio ya tienes el _package.json_ creado y configurado por lo que lo único que tienes que hacer es que se instalen las dependencias (`npm install`). Una vez hecho:
+- para pasar los test ejecuta `npm run test`
+- cuando quieras probarlo en el navegador ejecuta `npx webpack --mode=development`: esto crea el fichero **dist/main.js** (el que está enlazado en el _index.html_) donde mete el código de todos nuestros ficheros javascript. Deberás ejecutarlo cada vez que hagas cambios en tu código y quieras probarlos en el navegador
 
-Fijaos en el código que os paso que para que la clase _Store_ pueda usar los métodos de _Product_ debemos hacer:
+Fijaos en el código que os paso. Para que la clase _Store_ pueda usar los métodos de _Product_ debemos hacer:
 - añadir al final de _product.class.js_ el código `module.exports = Product`. Esto hace accesible la clase a cualquier fichero que importe _product.class.js_. Es lo mismo que hacíamos en los ficheros _functions.js_ de los ejercicios anteriores para que los tests pudieran acceder a sus funciones
 - añadir al principio de _store.class.js_ el código `const Product = require('./product.class')`. Crea una variable _Product_ que es la clase exportada en el otro fichero
 
-Lo mismo habrá que hacer para que _index.js_ pueda llamar a métodos de _Store_ (exportar la clase en _store.class_ e importar ese fichero en _index_).
+Lo mismo tendréis que hacer para que _index.js_ pueda llamar a métodos de _Store_ (exportar la clase en _store.class_ e importar ese fichero en _index_).
 
 ## Probar el código
 En la carpeta _test_ ya tienes hechos varios test que puedes pasar para comprobar tu código. Recuerda que simplemente debes hacer:
@@ -133,7 +133,7 @@ Para probar que funciona en el navegador añade al fichero _index.js_ el código
 - mostrar por consola 'LISTADO DE PRODUCTOS CON POCAS EXISTENCIAS'
 - mostrar por consola los productos del almacén con menos de 10 unidades
 
-Recuerda que siempre que llames a una función que pueda generar un error debes hacer dicha llamada dentro de una sentencia `try...catch`. Lo que haremos si se produce un error es mostrarlo por consola con el comando `console.error`.
+Recuerda que siempre que llames a una función que pueda generar un error debes hacer dicha llamada dentro de una sentencia `try...catch`. Lo que haremos en _index.js_ si captura un error es mostrarlo por consola con el comando `console.error`.
 
 Al abrir la página en el navegador la consola deberá mostrar lo siguiente:
 
@@ -156,9 +156,9 @@ LISTADO DE PRODUCTOS CON POCAS EXISTENCIAS
 - TV Samsung MP45: 8 uds. x 325.90 €/u = 2607.20 €
 ```
 
-además de 3 mensajes de error debido a que:
+y además 3 mensajes de error debido a que:
 - se pasan unidades negativas (-2) a _changeProduct_ al cambiar los datos de la impresora
 - se intentan restar más unidades (10) de las que quedan (8) a la TV
 - se intenta borrar el producto 1 y le quedan 8 unidades
 
-**NOTA**: cuando acabes tu práctica mira el código que genera webpack (dist/main.js). Ahora vuelve a ejecutarlo pero para que genere el fichero para producción (`--mode=production`) y fíjate en el código del fichero generado. 
+**NOTA**: cuando acabes tu práctica mira el código que genera webpack (dist/main.js). Ahora vuelve a generarlo pero esta vez para producción (`--mode=production`) y fíjate de nuevo en el código del fichero. 

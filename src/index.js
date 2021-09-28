@@ -1,8 +1,8 @@
 'use strict'
 
-const Store = require('./store.class');
-
 // Creamos un nuevo almacén con id 1
+// Antes deberás haber importado la 
+// clase Store para poder usarla
 
 // Añadimos los 4 objetos que nos piden
 
