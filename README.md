@@ -161,3 +161,4 @@ además de 3 mensajes de error debido a que:
 - se intentan restar más unidades (10) de las que quedan (8) a la TV
 - se intenta borrar el producto 1 y le quedan 8 unidades
 
+**NOTA**: cuando acabes tu práctica mira el código que genera webpack (dist/main.js). Ahora vuelve a ejecutarlo pero para que genere el fichero para producción (`--mode=production`) y fíjate en el código del fichero generado. 
