@@ -26,7 +26,7 @@ Respecto a los botones de cada formulario tienen el siguiente aspecto:
 <button type="reset" class="btn btn-secondary">Reset</button>
 ```
 
-![Almacén](./img/ejer4-1.png)
+![Almacén](./media/almacen.png)
 
 ## Organización del código
 Dentro de la carpeta **src/** tenemos los ficheros:

@@ -1,9 +1,6 @@
 'use strict'
 
 // Aquí importaremos la clase del controlador e instanciaremos uno
-const Controller = require('./controller/controller.class')
-
-const myController = new Controller()
 
 // A continuación crearemos una función manejadora para cada formulario
 window.addEventListener('load', () => {
@@ -32,16 +29,20 @@ window.addEventListener('load', () => {
   document.getElementById('del-prod').addEventListener('submit', (event) => {
     event.preventDefault()
 
-    myController.deleteProductFromStore(document.getElementById('delprod-id').value)
+    // Aquí el código para obtener los datos del formulario
+
+    // Aquí llamamos a la función del controlador que borra productos
+    // (addProductToStore) pasándole como parámetro esos datos
+
   })
 
   document.getElementById('stock-prod').addEventListener('submit', (event) => {
     event.preventDefault()
 
-    myController.changeProductStock(
-      document.getElementById('stockprod-id').value, 
-      document.getElementById('stockprod-units').value
-    )
+    // Aquí el código para obtener los datos del formulario
+
+    // Aquí llamamos a la función del controlador que borra productos
+    // (changeProductStock) pasándole como parámetro esos datos
   })
 
 })
