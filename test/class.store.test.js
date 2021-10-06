@@ -24,11 +24,11 @@ describe('función addProduct', () => {
 	test('crea dos productos en el almacén y sus id son distintas', () => {
 		let almacen=new Store(1);
 		let prod1=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(prod).toBeTruthy();
+		expect(prod1).toBeTruthy();
 		expect(almacen.products.length).toBe(1);
 		expect(almacen.products[0]).toEqual({id: prod1.id, name: 'Producto 2', price: 12.56, units: 0});
 		let prod2=almacen.addProduct({name:"Producto 3", price: 0.12, units: 3});
-		expect(prod).toBeTruthy();
+		expect(prod2).toBeTruthy();
 		expect(almacen.products.length).toBe(2);
 		expect(almacen.products[1]).toEqual({id: prod2.id, name: 'Producto 3', price: 0.12, units: 3});
 		expect(prod2.id).not.toBe(prod1.id)
