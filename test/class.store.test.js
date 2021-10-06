@@ -1,4 +1,4 @@
-const Store = require('../src/store.class');
+const Store = require('../src/model/store.class');
 
 describe('Constructor', () => {
 	test('Existe la clase Store', () => {
@@ -15,32 +15,34 @@ describe('Constructor', () => {
 describe('función addProduct', () => {
 	test('crea un producto en el almacén sin unidades y su id es 1', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(hecho).toBeTruthy();
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(prod).toBeTruthy();
 		expect(almacen.products.length).toBe(1);
-		expect(almacen.products[0]).toEqual({id: 1, name: 'Producto 2', price: 12.56, units: 0});
+		expect(almacen.products[0]).toEqual({id: prod.id, name: 'Producto 2', price: 12.56, units: 0});
 	});
 	
-	test('crea dos productos en el almacén y sus id son 1 y 2', () => {
+	test('crea dos productos en el almacén y sus id son distintas', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(hecho).toBeTruthy();
+		let prod1=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(prod).toBeTruthy();
 		expect(almacen.products.length).toBe(1);
-		expect(almacen.products[0]).toEqual({id: 1, name: 'Producto 2', price: 12.56, units: 0});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12, units: 3});
-		expect(hecho).toBeTruthy();
+		expect(almacen.products[0]).toEqual({id: prod1.id, name: 'Producto 2', price: 12.56, units: 0});
+		let prod2=almacen.addProduct({name:"Producto 3", price: 0.12, units: 3});
+		expect(prod).toBeTruthy();
 		expect(almacen.products.length).toBe(2);
-		expect(almacen.products[1]).toEqual({id: 2, name: 'Producto 3', price: 0.12, units: 3});
+		expect(almacen.products[1]).toEqual({id: prod2.id, name: 'Producto 3', price: 0.12, units: 3});
+		expect(prod2.id).not.toBe(prod1.id)
 	});	
 		
 	test('si crea dos productos y borra el 1º, al crear otro nuevo su id es 3', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12});
+		let prod1=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		let prod2=almacen.addProduct({name:"Producto 3", price: 0.12});
 		almacen.products.splice(0, 1);
-		hecho=almacen.addProduct({name:"Producto nuevo", price: 5.12});
+		let prod3=almacen.addProduct({name:"Producto nuevo", price: 5.12});
 		expect(almacen.products.length).toBe(2);
-		expect(almacen.products[1]).toEqual({id: 3, name: 'Producto nuevo', price: 5.12, units: 0});
+		expect(almacen.products[1]).toEqual({id: prod3.id, name: 'Producto nuevo', price: 5.12, units: 0});
+		expect(prod3.id).not.toBe(prod2.id)
 	});	
 
 	test('no crea un producto sin nombre', () => {
@@ -89,41 +91,41 @@ describe('función addProduct', () => {
 describe('función findProduct', () => {
 	test('encuentra un producto que existe', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12});
-		let prod=almacen.findProduct(2);
-		expect(prod).toEqual({id: 2, name: 'Producto 3', price: 0.12, units: 0});
+		let prod1=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		let prod2=almacen.addProduct({name:"Producto 3", price: 0.12});
+		let prod=almacen.findProduct(prod2.id);
+		expect(prod).toEqual({id: prod2.id, name: 'Producto 3', price: 0.12, units: 0});
 	});
 	
 	test('no encuentra un producto que no existe', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12});
-		expect(almacen.findProduct(5)).toBeUndefined();
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		prod=almacen.addProduct({name:"Producto 3", price: 0.12});
+		expect(almacen.findProduct(25)).toBeUndefined();
 	});	
 })
 
 describe('función delProduct', () => {
 	test('Borra un producto sin unidades', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12});
-		expect(almacen.delProduct(2)).toEqual({id: 2, name: 'Producto 3', price: 0.12, units: 0});
+		let prod1=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		let prod2=almacen.addProduct({name:"Producto 3", price: 0.12});
+		expect(almacen.delProduct(prod2.id)).toEqual({id: prod2.id, name: 'Producto 3', price: 0.12, units: 0});
 		expect(almacen.products.length).toBe(1);
 	});	
 
 	test('no borra un producto con unidades', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 3});
-		expect(() => almacen.delProduct(1)).toThrow();
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 3});
+		expect(() => almacen.delProduct(prod.id)).toThrow();
 		expect(almacen.products.length).toBe(1);
 	});
 	
 	test('no borra un producto que no existe', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		hecho=almacen.addProduct({name:"Producto 3", price: 0.12});;
-		expect(() => almacen.delProduct(8)).toThrow();
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		prod=almacen.addProduct({name:"Producto 3", price: 0.12});;
+		expect(() => almacen.delProduct(28)).toThrow();
 		expect(almacen.products.length).toBe(2);
 	});
 })
@@ -131,104 +133,102 @@ describe('función delProduct', () => {
 describe('función changeProduct', () => {
 	test('cambia el precio de un producto', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(almacen.changeProduct({id:1, price: 5.34}));
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 5.34, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(almacen.changeProduct({id: prod.id, price: 5.34}));
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 5.34, units: 0}]);
 	});
 	
 	test('cambia el precio a 0', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(almacen.changeProduct({id: 1, price: 0}));
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 0, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(almacen.changeProduct({id: prod.id, price: 0}));
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 0, units: 0}]);
 	});	
 	
 	test('no cambia un producto si no se le pasa una id', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
 		expect(() => almacen.changeProduct({name: 'asd'})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si precio no es nº', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProduct({id:1, price: 'asd'})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProduct({id: prod.id, price: 'asd'})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si precio es negativo', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProduct({id:1, price: -12})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProduct({id: prod.id, price: -12})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si unidades no es nº', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProduct({id:1, units: 'asd'})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProduct({id: prod.id, units: 'asd'})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si unidades es negativo', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
-		expect(() => almacen.changeProduct({id:1, units: -2})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 5}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
+		expect(() => almacen.changeProduct({id: prod.id, units: -2})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 5}]);
 	});
 	
 	test('no cambia un producto si unidades no es entero', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProduct({id:1, units: 2.2})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProduct({id: prod.id, units: 2.2})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});	
 })
 
 describe('función changeProductUnits', () => {
 	test('suma unidades a un producto', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		almacen.findProduct(1).changeUnits(5);
-		expect(almacen.changeProductUnits({id:1, units: 3}));
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 8}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
+		expect(almacen.changeProductUnits({id: prod.id, units: 3}));
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 8}]);
 	});
 	
 	test('resta unidades de un producto', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		almacen.findProduct(1).changeUnits(5);
-		almacen.changeProductUnits({id:1, units: -3});
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 2}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
+		almacen.changeProductUnits({id: prod.id, units: -3});
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 2}]);
 	});
 	
 	test('no cambia un producto si no se le pasa una id', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
 		expect(() => almacen.changeProductUnits({name: 'asd'})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si unidades no es nº', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProductUnits({id:1, units: 'asd'})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProductUnits({id: prod.id, units: 'asd'})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});
 	
 	test('no cambia un producto si no hay suficientes unidades', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
-		expect(() => almacen.changeProductUnits({id:1, units: -7})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 5}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56, units: 5});
+		expect(() => almacen.changeProductUnits({id: prod.id, units: -7})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 5}]);
 	});
 	
 	test('no cambia un producto si unidades no es entero', () => {
 		let almacen=new Store(1);
-		let hecho=almacen.addProduct({name: 'Producto 2', price: 12.56});
-		expect(() => almacen.changeProduct({id:1, units: 2.2})).toThrow();
-		expect(almacen.products).toEqual([{id:1, name: 'Producto 2', price: 12.56, units: 0}]);
+		let prod=almacen.addProduct({name: 'Producto 2', price: 12.56});
+		expect(() => almacen.changeProduct({id: prod.id, units: 2.2})).toThrow();
+		expect(almacen.products).toEqual([{id: prod.id, name: 'Producto 2', price: 12.56, units: 0}]);
 	});	
 })
 
